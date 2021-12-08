@@ -76,7 +76,7 @@ namespace ParserLink
             Console.WriteLine("КОНЕЦ");
             Console.ReadLine();
         }
-        /*      static private void ParserAccounting(MySqlConnection connection, List<int> listID, List<string> linkAccounting)// парсер бух учета
+              static private void ParserAccounting(MySqlConnection connection, List<int> listID, List<string> linkAccounting)// парсер бух учета
               {
                   MySqlCommand command;
                   MySqlDataReader reader;
@@ -90,10 +90,9 @@ namespace ParserLink
                   {
                       try
                       {
-                          accountingCompany = wc.DownloadString(LinkAccounting[i]);
-                          Console.WriteLine(company);
-
-                          string id = regions[i].Link.Remove(0, 45);
+                          accountingCompany = wc.DownloadString(linkAccounting[i]);
+                          Console.WriteLine(accountingCompany);
+                    /*
                           string regCount = "&gt;</a></li><li><a href=\"/sro/list.php\\?regions=" + id + "&PAGE_NUMBER=(.*?)\"\\s title";
                           MatchCollection mcCount = Regex.Matches(company, regCount);
                           //    Console.WriteLine(mcCount.Count);
@@ -149,7 +148,7 @@ namespace ParserLink
 
                               }
                               System.Threading.Thread.Sleep(10000);
-                          }
+                          }*/
 
                           Console.WriteLine("ВРЕМЯ____________________________________________________");
                           System.Threading.Thread.Sleep(50000);
@@ -160,9 +159,9 @@ namespace ParserLink
                           System.Threading.Thread.Sleep(300000);
                           i--;
                       }
-
+                    
                   }
-              }*/
+              }
         static private void ParserADDInfoCompany(MySqlConnection connection, List<int> listID, List<string> listLink)
         {
             Console.WriteLine("                        ");
