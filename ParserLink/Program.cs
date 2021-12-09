@@ -138,7 +138,7 @@ namespace ParserLink
                                         break;
 
                                 }
-                                Console.WriteLine(asset[n][c]);
+                              //  Console.WriteLine(asset[n][c]);
                             }
 
                         }
@@ -181,7 +181,7 @@ namespace ParserLink
                                         break;
 
                                 }
-                                Console.WriteLine(passive[n][c]);
+                             //   Console.WriteLine(passive[n][c]);
                             }
 
 
@@ -209,8 +209,8 @@ namespace ParserLink
                             }
                             else
                             {
-                              //  Console.WriteLine(mcFinancialResults[c].Groups[0].Value);
-                                switch (mcFinancialResults[c].Groups[0].Value)
+                            //    Console.WriteLine(mcFinancialResults[c].Groups[0].Value);
+                                switch (mcFinancialResults[c].Groups[1].Value)
                                 {
                                     case "0":
                                         financialResults[n].Add("0");
@@ -230,35 +230,50 @@ namespace ParserLink
 
                         }
                     }
+                    string[] sqls = new string[8];
+
                     for (int c = 0; c < mcYear.Count; c++)
                     {
                         //внеоборотне активы
                         id += 1;
-                        sql = "INSERT INTO `17ias-amisi_marekhinasa`.`non-current assets` (`ID`, `Intangible assets`, `Research and development results`, `Intangible search assets`, `Tangible search assets`, `Fixed assets`, `Profitable investments in tangible assets`, `Financial investments`, `Deferred tax assets`, `Other`, `Result`) VALUES ('" + id + "','" + asset[0][c] + "', '" + asset[1][c] + "', '" + asset[2][c] + "', '" + asset[3][c] + "',  '" + asset[4][c] + "', '" + asset[5][c] + "', '" + asset[6][c] + "', '" + asset[7][c] + "', '" + asset[8][c] + "', '" + asset[9][c] + "')";
-                        command = new MySqlCommand(sql, connection);
-                        // объект для чтения ответа сервера
-                        reader = command.ExecuteReader();
+                        sqls[0] = "INSERT INTO `17ias-amisi_marekhinasa`.`non-current assets` (`ID`, `Result`, `Intangible assets`, `Research and development results`, `Intangible search assets`, `Tangible search assets`, `Fixed assets`, `Profitable investments in tangible assets`, `Financial investments`, `Deferred tax assets`, `Other`) VALUES ('" + id + "','" + asset[0][c] + "', '" + asset[1][c] + "', '" + asset[2][c] + "', '" + asset[3][c] + "',  '" + asset[4][c] + "', '" + asset[5][c] + "', '" + asset[6][c] + "', '" + asset[7][c] + "', '" + asset[8][c] + "', '" + asset[9][c] + "')";
+                        
                         //оборотные активы
-                        sql = "INSERT INTO `17ias-amisi_marekhinasa`.`current assets` (`ID`, `Stocks`, `Value added tax on purchased valuables`, `Accounts receivable`, `Financial investments (excluding cash equivalents)`, `Cash and cash equivalents`, `Other`, `Result`) VALUES ('" + id + "','" + asset[10][c] + "', '" + asset[11][c] + "', '" + asset[12][c] + "', '" + asset[13][c] + "', '" + asset[14][c] + "', '" + asset[15][c] + "', '" + asset[16][c] + "')";
-                        command = new MySqlCommand(sql, connection);
-                        // объект для чтения ответа сервера
-                        reader = command.ExecuteReader();
+                        sqls[1] = "INSERT INTO `17ias-amisi_marekhinasa`.`current assets` (`ID`,`Result`, `Stocks`, `Value added tax on purchased valuables`, `Accounts receivable`, `Financial investments (excluding cash equivalents)`, `Cash and cash equivalents`, `Other`) VALUES ('" + id + "','" + asset[10][c] + "', '" + asset[11][c] + "', '" + asset[12][c] + "', '" + asset[13][c] + "', '" + asset[14][c] + "', '" + asset[15][c] + "', '" + asset[16][c] + "')";
+                        
                         //капитал и резервы
-                        sql = "INSERT INTO `17ias-amisi_marekhinasa`.`capital and reserves` (`ID`, `Authorized capital`, `Own shares`, `Revaluation of non-current assets`, `Additional capital (without revaluation)`, `Reserve capital`, `Retained earnings (uncovered loss)`, `Result`) VALUES ('" + id + "','" + passive[0][c] + "',  '" + passive[1][c] + "', '" + passive[2][c] + "', '" + passive[3][c] + "', '" + passive[4][c] + "', '" + passive[5][c] + "', '" + passive[6][c] + "')";
-                        command = new MySqlCommand(sql, connection);
-                        // объект для чтения ответа сервера
-                        reader = command.ExecuteReader();
+                        sqls[2] = "INSERT INTO `17ias-amisi_marekhinasa`.`capital and reserves` (`ID`,`Result`, `Authorized capital`, `Own shares`, `Revaluation of non-current assets`, `Additional capital (without revaluation)`, `Reserve capital`, `Retained earnings (uncovered loss)`) VALUES ('" + id + "','" + passive[0][c] + "',  '" + passive[1][c] + "', '" + passive[2][c] + "', '" + passive[3][c] + "', '" + passive[4][c] + "', '" + passive[5][c] + "', '" + passive[6][c] + "')";
+                        
                         //долгосрочные обяз
-                        sql = "INSERT INTO `17ias-amisi_marekhinasa`.`long-term liabilities` (`ID`, `Borrowed funds`, `Deferred tax liabilities`, `Estimated liabilities`, `Other`, `Result`) VALUES ('" + id + "','" + passive[7][c] + "', '" + passive[8][c] + "', '" + passive[9][c] + "', '" + passive[10][c] + "', '" + passive[11][c] + "')";
-                        command = new MySqlCommand(sql, connection);
-                        // объект для чтения ответа сервера
-                        reader = command.ExecuteReader();
+                        sqls[3] = "INSERT INTO `17ias-amisi_marekhinasa`.`long-term liabilities` (`ID`,`Result`, `Borrowed funds`, `Deferred tax liabilities`, `Estimated liabilities`, `Other`) VALUES ('" + id + "','" + passive[7][c] + "', '" + passive[8][c] + "', '" + passive[9][c] + "', '" + passive[10][c] + "', '" + passive[11][c] + "')";
+                        
                         //краткосрочные обяз
-                        sql = "INSERT INTO `17ias-amisi_marekhinasa`.`short-term liabilities` (`ID`, `Borrowed funds`, `Accounts payable`, `Deferred income`, `Estimated liabilities`, `Other`, `Result`) VALUES ('" + id + "','" + passive[12][c] + "', '" + passive[13][c] + "', '" + passive[14][c] + "', '" + passive[15][c] + "', '" + passive[16][c] + "', '" + passive[17][c] + "')";
-                        command = new MySqlCommand(sql, connection);
-                        // объект для чтения ответа сервера
-                        reader = command.ExecuteReader();
-                        reader.Close(); // закрываем reader
+                        sqls[4] = "INSERT INTO `17ias-amisi_marekhinasa`.`short-term liabilities` (`ID`,`Result`, `Borrowed funds`, `Accounts payable`, `Deferred income`, `Estimated liabilities`, `Other`) VALUES ('" + id + "','" + passive[12][c] + "', '" + passive[13][c] + "', '" + passive[14][c] + "', '" + passive[15][c] + "', '" + passive[16][c] + "', '" + passive[17][c] + "')";
+                        
+                        //актив
+                        sqls[5] = "INSERT INTO `17ias-amisi_marekhinasa`.`asset` ( `Date`, `Organization_ID`, `Non-current assets_ID`, `Current assets_ID`, `Result`) VALUES ( '" + mcYear[c].Groups[1].Value + "','" + listID[i]+"', '"+id+ "', '" + id + "', '" + asset[17][c] + "')";
+                        
+                        //пассив
+                        sqls[6] = "INSERT INTO `17ias-amisi_marekhinasa`.`passive` (`Date`, `Organization_ID`, `Capital and reserves_ID`, `Long-term liabilities_ID`, `Short-term liabilities_ID`, `Result`) VALUES ('" + mcYear[c].Groups[1].Value + "','" + listID[i] + "', '" + id + "','" + id + "', '" + id + "', '" + passive[18][c] + "')";
+                        
+                        //отчет о финансовых результатах
+                        sqls[7] = "INSERT INTO `17ias-amisi_marekhinasa`.`statement of financial results` ( `Revenue`, `Cost of sales`, `Gross profit (loss)`, `Commercial expenses`, `Management expenses`, `Profit (loss) from sales`, `Income from participation in other organizations`, `Interest receivable`, `Interest payable`, `Other income`, `Other expenses`, `Profit (loss) before taxation`, `Income tax`, `Other`, `Net profit (loss)`, `Result from revaluation of non-current assets`, `Result from other operations`,  `Total financial result of the period`, `Basic earnings (loss) per share`, `Diluted earnings (loss) per share`, `Date`, `Organization_ID`) VALUES (";// '23', '234', '232', '342', '34', '23', '2', '234', '3242', '2', '234', '23', '2', '22', '2', '2', '2', '2', '22', '342', '23', '34', '234', '23')";
+                        for (int n = 0; n < codeFinancialResults.Length; n++)
+                        {
+                            sqls[7] += "'"+financialResults[n][c]+"',";
+                        }
+                        sqls[7] += "'" + mcYear[c].Groups[1].Value + "','" + listID[i] + "')";
+                        
+                        foreach (var item in sqls)
+                        {
+                              command = new MySqlCommand(item, connection);
+                              // объект для чтения ответа сервера
+                              reader = command.ExecuteReader();
+                              reader.Close(); // закрываем reader
+
+                          //  Console.WriteLine(item);
+                        }
+                       
                     }
 
                    
