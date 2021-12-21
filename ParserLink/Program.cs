@@ -19,6 +19,15 @@ namespace ParserLink
             string database = "17IAS-AMISI_MarekhinaSA";
             string username = "17IAS-AMISI.MarekhinaSA";
             string password = "!cbK>ngTmiYxS&xH";
+            try
+            {
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
             MySqlConnection connection = new MySqlConnection("Server=" + host + ";Database=" + database + ";port=" + port + ";User Id=" + username + ";password=" + password);
             connection.Open();
             MySqlCommand command;
@@ -89,13 +98,14 @@ namespace ParserLink
             string[] codeAsset = { "1100", "1110", "1120", "1130", "1140", "1150", "1160", "1170", "1180", "1190", "1200", "1210", "1220", "1230", "1240", "1250", "1260", "1600" };
             string[] codePassive = { "1300", "1310", "1320", "1340", "1350", "1360", "1370", "1400", "1410", "1420", "1430", "1450", "1500", "1510", "1520", "1530", "1540", "1550", "1700" };
             string[] codeFinancialResults = { "2110", "2120", "2100", "2210", "2220", "2200", "2310", "2320", "2330", "2340", "2350", "2300", "2410", "2460", "2400", "2510", "2520", "2500", "2900", "2910" };
-            int id = 0;
-            for (int i = 0; i < listID.Count; i++)
+            int id = 4092;
+            for (int i = 508; i < listID.Count; i++)
             {
                 try
                 {
+                    if (linkAccounting[i] == "Отсутствует") continue;   
                     accountingCompany = wc.DownloadString(linkAccounting[i]);
-                    // Console.WriteLine(accountingCompany);
+                  //   Console.WriteLine(accountingCompany);
 
                     string regYear = "\"date\": \"(.*?)\",";
                     MatchCollection mcYear = Regex.Matches(accountingCompany, regYear);
@@ -166,20 +176,38 @@ namespace ParserLink
                             }
                             else
                             {
-                                switch (mcPassive[c].Groups[1].Value)
+                                try
                                 {
-                                    case "0":
-                                        passive[n].Add("0");
-                                        break;
-                                    case "null":
-                                        passive[n].Add("0");
-                                        break;
-                                    default:
-                                        string t = mcPassive[c].Groups[1].Value;
-                                        t = t.Trim(new char[] { '"' });
-                                        passive[n].Add(t);
-                                        break;
+                                    switch (mcPassive[c].Groups[1].Value)
+                                    {
+                                        case "0":
+                                            passive[n].Add("0");
+                                            break;
+                                        case "null":
+                                            passive[n].Add("0");
+                                            break;
+                                        default:
+                                            string t = mcPassive[c].Groups[1].Value;
+                                            t = t.Trim(new char[] { '"' });
+                                            passive[n].Add(t);
+                                            break;
 
+                                    }
+                                }
+                                catch (Exception)
+                                {
+                                    List<string> t = new List<string>();
+                                    if (mcPassive.Count - 1 < c)
+                                    {
+                                        passive[n].Add("0");
+                                        t = passive[n];
+                                        passive[n][0] = "0"; ;
+                                        for (int j = 1; j < t.Count; j++)
+                                        {
+                                            passive[n][j] = t[j - 1];
+                                        }
+
+                                    }
                                 }
                              //   Console.WriteLine(passive[n][c]);
                             }
@@ -209,22 +237,41 @@ namespace ParserLink
                             }
                             else
                             {
-                            //    Console.WriteLine(mcFinancialResults[c].Groups[0].Value);
-                                switch (mcFinancialResults[c].Groups[1].Value)
+                                //    Console.WriteLine(mcFinancialResults[c].Groups[0].Value);
+                                try
                                 {
-                                    case "0":
-                                        financialResults[n].Add("0");
-                                        break;
-                                    case "null":
-                                        financialResults[n].Add("0");
-                                        break;
-                                    default:
-                                        string t = mcFinancialResults[c].Groups[1].Value;
-                                        t = t.Trim(new char[] { '"' });
-                                        financialResults[n].Add(t);
-                                        break;
+                                    switch (mcFinancialResults[c].Groups[1].Value)
+                                    {
+                                        case "0":
+                                            financialResults[n].Add("0");
+                                            break;
+                                        case "null":
+                                            financialResults[n].Add("0");
+                                            break;
+                                        default:
+                                            string t = mcFinancialResults[c].Groups[1].Value;
+                                            t = t.Trim(new char[] { '"' });
+                                            financialResults[n].Add(t);
+                                            break;
 
+                                    }
                                 }
+                                catch (Exception)
+                                {
+                                    List<string> t = new List<string>();
+                                    if (mcFinancialResults.Count - 1 < c)
+                                    {
+                                        financialResults[n].Add("0");
+                                        t = financialResults[n];
+                                        financialResults[n][0] = "0"; ;
+                                        for (int j = 1; j < t.Count; j++)
+                                        {
+                                            financialResults[n][j] = t[j - 1];
+                                        }
+
+                                    }
+                                }
+
                                 Console.WriteLine(financialResults[n][c]);
                             }
 
@@ -399,7 +446,7 @@ namespace ParserLink
                     }
 
                     Console.WriteLine("ВРЕМЯ____________________________________________________");
-                    System.Threading.Thread.Sleep(1000);
+                    System.Threading.Thread.Sleep(3000);
 
                 }
                 catch (WebException e)
